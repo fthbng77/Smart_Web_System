@@ -1,50 +1,92 @@
-import React, { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import React, { useState, useEffect, useRef } from 'react';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import { useDroneData } from './DroneData';
+import ROSLIB from 'roslib';
 
 const customIcon = L.icon({
-  iconUrl: '/marker.png',
-  iconSize: [48, 48],
-  iconAnchor: [16, 32], 
-  popupAnchor: [0, -32]   
+    iconUrl: '/marker.png',
+    iconSize: [48, 48],
+    iconAnchor: [16, 32],
+    popupAnchor: [0, -32]
 });
-function MyMapComponent() {
-    const { droneData } = useDroneData();  
+
+function useDroneData() {
+    const [data, setData] = useState({
+        latitude: 41.016593, 
+        longitude: 28.951300,
+    });
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            setPosition(prev => [prev[0], prev[1] + 0.001]);
-        }, 2000);
+        const ros = new ROSLIB.Ros({
+            url: 'ws://localhost:9090' // ROS websocket sunucusunun URL'si
+        });
 
-        return () => clearInterval(interval); 
+        ros.on('connection', function () {
+            console.log('Connected to websocket server.');
+        });
+
+        ros.on('error', function (error) {
+            console.log('Error connecting to websocket server: ', error);
+        });
+
+        ros.on('close', function () {
+            console.log('Connection to websocket server closed.');
+        });
+
+        // Drone konum verilerini alacak ROS topic aboneliği
+        const poseTopic = new ROSLIB.Topic({
+            ros: ros,
+            name: '/mavros/local_position/pose', // Değiştirilebilir, drone'un konum verilerinin alındığı ROS topic'i
+            messageType: 'geometry_msgs/PoseStamped'
+        });
+
+        poseTopic.subscribe(function (message) {
+            setData({
+                latitude: message.pose.position.x, // Konum verileri burada güncelleniyor
+                longitude: message.pose.position.y, // Konum verileri burada güncelleniyor
+            });
+        });
+
+        // Cleanup fonksiyonu
+        return () => {
+            poseTopic.unsubscribe();
+        };
     }, []);
 
+    return data;
+}
+
+function MyMapComponent() {
+    const droneData = useDroneData();
+    const [map, setMap] = useState(null);
+    const markerRef = useRef(null);
+
+    useEffect(() => {
+        if (droneData.latitude && droneData.longitude && markerRef.current) {
+            const newLatLng = new L.LatLng(droneData.latitude, droneData.longitude);
+            markerRef.current.setLatLng(newLatLng);
+            if (map) {
+                map.panTo(newLatLng);
+            }
+        }
+    }, [droneData, map]);
+
     return (
-        <MapContainer center={position} zoom={13} style={{ width: '100%', height: '400px' }}>
+        <MapContainer 
+            center={[droneData.latitude, droneData.longitude]} 
+            zoom={13} 
+            whenCreated={setMap}
+            style={{ width: '100%', height: '400px' }}>
             <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                attribution='&copy; OpenStreetMap contributors'
             />
-            <MarkerUpdater position={position} />
-            <Marker position={position} icon={customIcon}>
-                <Popup>
-                    Drone'un bulunduğu yer
-                </Popup>
+            <Marker ref={markerRef} position={[droneData.latitude, droneData.longitude]} icon={customIcon}>
+                <Popup>Drone's Current Location</Popup>
             </Marker>
         </MapContainer>
     );
-}
-
-function MarkerUpdater({ position }) {
-    const map = useMap();
-
-    useEffect(() => {
-        map.flyTo(position);  
-    }, [position, map]);
-
-    return null;
 }
 
 export default MyMapComponent;

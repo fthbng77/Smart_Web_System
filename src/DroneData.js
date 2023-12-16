@@ -1,8 +1,5 @@
-import React, { useEffect, useState, createContext } from "react";
+import React, { useEffect, useState } from "react";
 import ROSLIB from 'roslib';
-
-export const DroneDataContext = createContext(null);
-
 
 function DroneData() {
     const [data, setData] = useState({
@@ -95,7 +92,6 @@ function DroneData() {
         });
 
     }, []);
-
 
     return (
         <div style={{ margin: '20px', padding: '20px', border: '1px solid #ddd' }}>
