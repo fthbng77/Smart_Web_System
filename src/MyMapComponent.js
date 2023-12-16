@@ -11,15 +11,28 @@ const customIcon = L.icon({
     popupAnchor: [0, -32]
 });
 
-function useDroneData() {
+function localToGlobal(localX, localY, homeLatitude, homeLongitude) {
+    const metersPerLat = 111320;
+    const metersPerLng = 40075000 * Math.cos(homeLatitude * Math.PI / 180) / 360;
+
+    const deltaLat = localY / metersPerLat;
+    const deltaLng = localX / metersPerLng;
+
+    return {
+        latitude: homeLatitude + deltaLat,
+        longitude: homeLongitude + deltaLng
+    };
+}
+
+function useDroneData(homeLat, homeLng) {
     const [data, setData] = useState({
-        latitude: 41.016593, 
-        longitude: 28.951300,
+        latitude: homeLat, 
+        longitude: homeLng,
     });
 
     useEffect(() => {
         const ros = new ROSLIB.Ros({
-            url: 'ws://localhost:9090' // ROS websocket sunucusunun URL'si
+            url: 'ws://localhost:9090'
         });
 
         ros.on('connection', function () {
@@ -34,31 +47,33 @@ function useDroneData() {
             console.log('Connection to websocket server closed.');
         });
 
-        // Drone konum verilerini alacak ROS topic aboneliği
         const poseTopic = new ROSLIB.Topic({
             ros: ros,
-            name: '/mavros/local_position/pose', // Değiştirilebilir, drone'un konum verilerinin alındığı ROS topic'i
+            name: '/mavros/local_position/pose',
             messageType: 'geometry_msgs/PoseStamped'
         });
 
         poseTopic.subscribe(function (message) {
+            const globalCoords = localToGlobal(message.pose.position.x, message.pose.position.y, homeLat, homeLng);
             setData({
-                latitude: message.pose.position.x, // Konum verileri burada güncelleniyor
-                longitude: message.pose.position.y, // Konum verileri burada güncelleniyor
+                latitude: globalCoords.latitude,
+                longitude: globalCoords.longitude
             });
         });
 
-        // Cleanup fonksiyonu
         return () => {
             poseTopic.unsubscribe();
         };
-    }, []);
+    }, [homeLat, homeLng]);
 
     return data;
 }
 
 function MyMapComponent() {
-    const droneData = useDroneData();
+    const homeLatitude = 41.016593;
+    const homeLongitude = 28.951300;
+
+    const droneData = useDroneData(homeLatitude, homeLongitude);
     const [map, setMap] = useState(null);
     const markerRef = useRef(null);
 
@@ -90,3 +105,4 @@ function MyMapComponent() {
 }
 
 export default MyMapComponent;
+
