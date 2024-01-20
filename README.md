@@ -13,7 +13,6 @@ git push -u -f origin main
 ```
 normal key:
 ```
-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
+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
 ```
-workflow:
-`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`
+
