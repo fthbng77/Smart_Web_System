@@ -70,6 +70,7 @@ sudo systemctl start mongod
 mongodb başlatmak için:
 ```
 mongosh
+use gokmendatabase
 ```
 
 <p align="center">
