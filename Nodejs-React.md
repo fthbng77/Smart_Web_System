@@ -72,6 +72,11 @@ mongodb başlatmak için:
 mongosh
 use gokmendatabase
 ```
+server çalıştırmak ve mongoDB ile bağlantıyı kontrol etmek için:
+```
+node server.js
+```
+
 
 <p align="center">
   <img src="web1.jpeg" width="400" />
