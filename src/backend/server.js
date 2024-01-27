@@ -1,38 +1,53 @@
-const express = require('express');
-const http = require('http');
-const socketIo = require('socket.io');
-const mongoose = require('mongoose');
-const path = require('path');
-const cors = require('cors');
-const authRoutes = require('./routes/auth');
-const setupRosConnection = require('./ros/rosConnection');  
+import React, { useState } from 'react';
+import axios from 'axios';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from './Root';
 
-const app = express();
-app.use(cors());
-const server = http.createServer(app);
-const io = socketIo(server);
+function SignUp() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-mongoose.connect('mongodb://localhost/gokmendatabase', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-}).then(() => {
-  console.log('MongoDB connected successfully.');
-}).catch(err => {
-  console.error('MongoDB connection error:', err.message);
-});
+  const { setUser } = useAuth();
+  const navigate = useNavigate();
 
-app.use(express.json());  
-app.use('/auth', authRoutes);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('http://localhost:3000/auth/signup', { email, password });
+      console.log(response.data);
+      
+      if (response.data.user) {
+        setUser(response.data.user);
+        navigate('/app');
+      } else {
+        setError('Registration failed, please try again.');
+      }
+    } catch (error) {
+      console.error(error);
+      // Hata mesajını daha spesifik bir şekilde ayarlayın
+      setError(error.response?.data?.message || 'An unexpected error occurred.');
+    }
+  };
 
-setupRosConnection(io);
+  return (
+    <div className="login-container">
+      <form onSubmit={handleSubmit} className="login-form">
+        <label>Email:
+          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+        </label>
+        <label>Password:
+          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+        </label>
+        <button type="submit">Sign Up</button>
+        {/* Hata mesajını string olarak render edin */}
+        {error && <p className="error">{error}</p>}
+      </form>
+      <div className="signup-link">
+        <p>Already have an account? <Link to="/login">Log In</Link></p>
+      </div>
+    </div>
+  );
+}
 
-// Statik Dosyaları Sunma
-app.use(express.static('/home/fatih/catkin_ws/src/iq_gnc/scripts/Gokmen/gokmen-app/build'));
-
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve('/home/fatih/catkin_ws/src/iq_gnc/scripts/Gokmen/gokmen-app/build', 'index.html'));
-});
-
-server.listen(3000, () => {
-  console.log('Server is listening on port 3000');
-});
+export default SignUp;
