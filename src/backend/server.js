@@ -8,18 +8,20 @@ const authRoutes = require('./routes/auth');
 const setupRosConnection = require('./ros/rosConnection');  
 
 const app = express();
+app.use(cors());
 const server = http.createServer(app);
 const io = socketIo(server);
 
-// MongoDB'ye Bağlanma
 mongoose.connect('mongodb://localhost/gokmendatabase', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+}).then(() => {
+  console.log('MongoDB connected successfully.');
+}).catch(err => {
+  console.error('MongoDB connection error:', err.message);
 });
 
-// Middleware Tanımlama
 app.use(express.json());  
-app.use(cors());
 app.use('/auth', authRoutes);
 
 setupRosConnection(io);
