@@ -3,6 +3,7 @@ const http = require('http');
 const socketIo = require('socket.io');
 const mongoose = require('mongoose');
 const path = require('path');
+const cors = require('cors');
 const authRoutes = require('./routes/auth');
 const setupRosConnection = require('./ros/rosConnection');  
 
@@ -18,19 +19,18 @@ mongoose.connect('mongodb://localhost/gokmendatabase', {
 
 // Middleware Tanımlama
 app.use(express.json());  
+app.use(cors());
 app.use('/auth', authRoutes);
 
 setupRosConnection(io);
 
 // Statik Dosyaları Sunma
-app.use(express.static('/home/fatih/catkin_ws/src/iq_gnc/scripts/web/GOKMEN_Web/gokmen-app/build'));
+app.use(express.static('/home/fatih/catkin_ws/src/iq_gnc/scripts/Gokmen/gokmen-app/build'));
 
-// Tüm Diğer Rotalar
 app.get('*', (req, res) => {
-  res.sendFile(path.resolve('/home/fatih/catkin_ws/src/iq_gnc/scripts/web/GOKMEN_Web/gokmen-app/build', 'index.html'));
+  res.sendFile(path.resolve('/home/fatih/catkin_ws/src/iq_gnc/scripts/Gokmen/gokmen-app/build', 'index.html'));
 });
 
-// Sunucuyu Başlatma
 server.listen(3000, () => {
   console.log('Server is listening on port 3000');
 });
