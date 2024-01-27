@@ -1,5 +1,6 @@
 import React, { useContext, createContext, useState } from "react";
-import { BrowserRouter as Router, Route, Routes, Navigate, Outlet } from "react-router-dom";
+import PropTypes from "prop-types";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import App from "./App";
 import Login from "./Login";
 import SignUp from "./SignUp";
@@ -22,6 +23,10 @@ export function AuthProvider({ children }) {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
+AuthProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+};
+
 function PrivateRoute({ children }) {
   const { isLoggedIn } = useAuth();
 
@@ -32,11 +37,16 @@ function PrivateRoute({ children }) {
   );
 }
 
+PrivateRoute.propTypes = {
+  children: PropTypes.node.isRequired,
+};
+
 function Root() {
   return (
     <AuthProvider>
       <Router>
         <Routes>
+          {/* Pass <App /> as a direct child of <PrivateRoute> */}
           <Route path="/app" element={<PrivateRoute><App /></PrivateRoute>} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
