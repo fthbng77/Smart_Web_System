@@ -12,49 +12,75 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Form konteyneri */
 .login-container {
   display: flex;
   align-items: center;
-  justify-content: center;
   height: 100vh;
 }
 
-/* Giriş formu */
-.login-form {
+/* Logo container styling */
+.logo-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo {
+  width: auto;
+  height: 300px;
+  max-width: 300px;
+}
+
+.form-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: 10px;
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: rgba(255, 255, 255, 1);
   padding: 20px;
   border-radius: 10px;
+  max-width: 400px;
+  width: 100%;
+  margin: 0 auto;
+  margin-left: 120px;
+  margin-right: 400px;
+}
+
+.login-form {
+  width: 340px; /* Formun sabit genişliği */
+  margin: auto; /* Formu yatay eksende ortalar */
+  padding: 20px; /* Dış boşluk */
+  background-color: rgba(255, 255, 255, 0.0); /* Arka plan rengi ve şeffaflık */
+  border-radius: 10px; /* Dış kenar yuvarlaklığı */
+  text-align: left; /* Metni sola hizalar */
 }
 
 .login-form label {
   display: block;
-  margin-bottom: 10px;
+  margin-bottom: 10px; 
 }
 
-.login-form input {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+.login-form input[type="email"],
+.login-form input[type="password"] {
+  box-sizing: border-box; /* padding ve border genişliği içerir */
+  width: 300px; /* Input alanlarının sabit genişliği */
+  padding: 10px; /* İç boşluk */
+  margin-bottom: 10px; /* Alt alan aralığı */
+  border: 1px solid #ccc; /* Kenarlık */
+  border-radius: 5px; /* Kenar yuvarlaklığı */
 }
 
 .login-form button {
-  width: 100%;
-  padding: 10px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+  width: 300px; /* Butonun sabit genişliği */
+  padding: 10px; /* İç boşluk */
+  background-color: #007bff; /* Arka plan rengi */
+  color: #fff; /* Yazı rengi */
+  border: none; /* Kenarlık yok */
+  border-radius: 15px; /* Kenar yuvarlaklığı */
+  cursor: pointer; /* İmleç */
 }
 
-/* Kayıt olma bağlantısı */
 .signup-link {
   margin-top: 10px;
 }
@@ -66,19 +92,17 @@ body {
 
 .signup-container {
   display: flex;
-  justify-content: center;
   align-items: center;
   height: 100vh;
 }
 
 .signup-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  background-color: rgba(255, 255, 255, 0.7);
-  padding: 20px;
-  border-radius: 10px;
+  width: 340px; /* Formun sabit genişliği */
+  margin: auto; /* Formu yatay eksende ortalar */
+  padding: 20px; /* Dış boşluk */
+  background-color: rgba(255, 255, 255, 0.0); /* Arka plan rengi ve şeffaflık */
+  border-radius: 10px; /* Dış kenar yuvarlaklığı */
+  text-align: left; /* Metni sola hizalar */
 }
 
 .signup-form label {
@@ -86,26 +110,26 @@ body {
   margin-bottom: 10px;
 }
 
-.signup-form input {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+.signup-form input[type="email"],
+.signup-form input[type="password"] {
+  box-sizing: border-box; 
+  width: 300px; /* Input alanlarının sabit genişliği */
+  padding: 10px; /* İç boşluk */
+  margin-bottom: 10px; /* Alt alan aralığı */
+  border: 1px solid #ccc; /* Kenarlık */
+  border-radius: 5px; 
 }
 
 .signup-form button {
-  width: 100%;
-  padding: 10px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
+  width: 300px; 
+  padding: 10px; 
+  background-color: #007bff; 
+  color: #fff; 
+  border: none; 
+  border-radius: 15px; 
   cursor: pointer;
-  margin-top: 10px; /* Sign Up butonunun üstündeki boşluğu ayarlar */
 }
 
-/* Giriş bağlantısı */
 .login-link {
   margin-top: 10px;
 }
@@ -115,7 +139,8 @@ body {
   text-decoration: none;
 }
 
-/* Kod blokları için stil */
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
+
+

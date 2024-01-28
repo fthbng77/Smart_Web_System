@@ -4,7 +4,6 @@ import ROSLIB from "roslib";
 function DroneControl() {
   const [altitude, setAltitude] = useState(5);
   const [connectionStatus, setConnectionStatus] = useState("Disconnected");
-
   const rosRef = useRef(new ROSLIB.Ros({
     url: "ws://localhost:9090",
   }));
@@ -93,7 +92,7 @@ function DroneControl() {
     }
   }, []);
 
-  const handleKeyUp = useCallback((e) => {
+  const handleKeyUp = useCallback(() => {
     sendVelocityCommand(0, 0, 0);
   }, []);
 

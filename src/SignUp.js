@@ -14,7 +14,7 @@ function SignUp() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/register', { email, password });
+      const response = await axios.post('http://localhost:3000/auth/signup', { email, password });
       console.log(response.data);
       
       if (response.data.user) {
@@ -25,13 +25,19 @@ function SignUp() {
       }
     } catch (error) {
       console.error(error);
-      setError(error.response.data);
+      // Hata mesajını daha spesifik bir şekilde ayarlayın
+      setError(error.response?.data?.message || 'An unexpected error occurred.');
     }
   };
 
   return (
-    <div className="login-container">
-      <form onSubmit={handleSubmit} className="login-form">
+
+    <div className="signup-container">
+    <div className="logo-container">
+      <img src="/gokmen512.png" alt="Logo" className="logo" />
+    </div>
+    <div className="form-container">
+      <form onSubmit={handleSubmit} className="signup-form">
         <label>Email:
           <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
         </label>
@@ -39,11 +45,13 @@ function SignUp() {
           <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
         </label>
         <button type="submit">Sign Up</button>
-        {error && <p className="error">{error}</p>} {/* Hata mesajını render et */}
+        {/* Hata mesajını string olarak render edin */}
+        {error && <p className="error">{error}</p>}
       </form>
       <div className="signup-link">
         <p>Already have an account? <Link to="/login">Log In</Link></p>
       </div>
+    </div>
     </div>
   );
 }

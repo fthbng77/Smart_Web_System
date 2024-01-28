@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import ROSLIB from 'roslib';
-import DroneData from "./DroneData";
-import DroneControl from "./DroneControl";
-import JoystickControl from "./JoystickControl";
+import DroneData from './DroneData';
+import DroneControl from './DroneControl';
+import JoystickControl from './JoystickControl';
 import JoystickComponent from './JoystickComponent';
-import MyMapComponent from './MyMapComponent';  // Harita için eklenen import
+import MyMapComponent from './MyMapComponent';
+import { Link } from 'react-router-dom';
+
 
 function App() {
     const [imgSrc, setImgSrc] = useState(null);
@@ -55,68 +57,46 @@ function App() {
     }, []);
     
     return (
-        <div style={{ display: 'grid', gridTemplateRows: '40% 40% 20%', gridTemplateColumns: '1fr 1fr', height: '100vh', backgroundImage: `url('./gokmenwp.jpg')`, backgroundSize: 'cover', backgroundPosition: 'center center'}}>
-            
-            {/* Üst Sol - Görüntüler */}
-            <div style={{ gridRow: '1', gridColumn: '1', overflow: 'hidden' }}>
-                {imgSrc && <img src={imgSrc} alt="From ROS" style={{ width: '640px', height: '480px', objectFit: 'cover' }} />}
-            </div>
-            
-            {/* Üst Sağ - Butonlar ve JoystickComponent */}
-            <div 
-                style={{ 
-                    gridRow: '1', 
-                    gridColumn: '2', 
-                    padding: '10px', 
-                    background: 'rgba(255, 255, 255, 1)', 
-                    boxShadow: '0px 0px 10px rgba(0,0,0,0.1)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'stretch',
-                    gap: '10px'
-                }} >
-                <div 
-                    style={{
-                        padding: '10px',
-                        border: '1px solid #ddd',
-                        borderRadius: '8px',
-                        flex: 1,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '10px',
-                        boxSizing: 'border-box'
-                    }}
-                >
-                    <DroneControl />
+        <div>
+            {/* Navigasyon Bar */}
+            <nav>
+                <ul>
+                    <li><Link to="/app">Home</Link></li>
+                    <li><Link to="/ros-image">ROS Image</Link></li>
+                </ul>
+            </nav>
+
+            {/* Uygulama içeriği */}
+            <div style={{ display: 'grid', gridTemplateRows: '40% 40% 20%', gridTemplateColumns: '1fr 1fr', height: '100vh', backgroundImage: `url('./gokmenwp.jpg')`, backgroundSize: 'cover', backgroundPosition: 'center center' }}>
+                {/* Üst Sol - Görüntüler */}
+                <div style={{ gridRow: '1', gridColumn: '1', overflow: 'hidden' }}>
+                    {imgSrc && <img src={imgSrc} alt="From ROS" style={{ width: '640px', height: '480px', objectFit: 'cover' }} />}
                 </div>
-                <div 
-                    style={{
-                        padding: '0px',
-                        border: '1px solid #ddd',
-                        borderRadius: '8px',
-                        display: 'flex',
-                        flexDirection: 'row',
-                        gap: '100px',
-                        boxSizing: 'border-box',
-                        height: '130px'
-                    }}
-                >
-                    <div style={{ flex: 1 }}>
-                        <JoystickControl />
+
+                {/* Üst Sağ - Drone Kontrolü ve Joystick */}
+                <div style={{ gridRow: '1', gridColumn: '2', padding: '10px', background: 'rgba(255, 255, 255, 1)', boxShadow: '0px 0px 10px rgba(0,0,0,0.1)', display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: '10px' }}>
+                    <div style={{ padding: '10px', border: '1px solid #ddd', borderRadius: '8px', flex: 1, display: 'flex', flexDirection: 'column', gap: '10px', boxSizing: 'border-box' }}>
+                        <DroneControl />
                     </div>
-                    <div style={{ flex: 1, overflow: 'auto', marginTop: '10px' }}>
-                        <JoystickComponent />
+                    <div style={{ padding: '0px', border: '1px solid #ddd', borderRadius: '8px', display: 'flex', flexDirection: 'row', gap: '100px', boxSizing: 'border-box', height: '130px' }}>
+                        <div style={{ flex: 1 }}>
+                            <JoystickControl />
+                        </div>
+                        <div style={{ flex: 1, overflow: 'auto', marginTop: '10px' }}>
+                            <JoystickComponent />
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div style={{ gridRow: '2', gridColumn: 'span 2', background: 'rgba(249, 249, 249, 0)', padding: '20px' }}>
-                <DroneData />
-            </div>
+                {/* Orta - Drone Verileri */}
+                <div style={{ gridRow: '2', gridColumn: 'span 2', background: 'rgba(249, 249, 249, 0)', padding: '20px' }}>
+                    <DroneData />
+                </div>
 
-            {/* Alt - Harita */}
-            <div style={{ gridRow: '3', gridColumn: 'span 2' }}>
-                <MyMapComponent />
+                {/* Alt - Harita */}
+                <div style={{ gridRow: '3', gridColumn: 'span 2' }}>
+                    <MyMapComponent />
+                </div>
             </div>
         </div>
     );

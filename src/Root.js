@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-d
 import App from "./App";
 import Login from "./Login";
 import SignUp from "./SignUp";
+import RosImagePage from "./RosImagePage";
 
 const AuthContext = createContext();
 
@@ -46,11 +47,12 @@ function Root() {
     <AuthProvider>
       <Router>
         <Routes>
-          {/* Pass <App /> as a direct child of <PrivateRoute> */}
           <Route path="/app" element={<PrivateRoute><App /></PrivateRoute>} />
+          <Route path="/ros-image" element={<PrivateRoute><RosImagePage /></PrivateRoute>} /> {/* RosImagePage için yeni rota */}
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route index element={<Navigate to="/login" replace />} />
+          <Route index element={<Navigate to="/app" replace />} /> {/* Giriş sayfası yerine App sayfasına yönlendir */}
+          <Route path="*" element={<Navigate to="/app" replace />} /> {/* Eşleşmeyen yollar için App sayfasına yönlendir */}
         </Routes>
       </Router>
     </AuthProvider>

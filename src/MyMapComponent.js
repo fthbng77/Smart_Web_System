@@ -98,7 +98,7 @@ function MyMapComponent() {
                 attribution='&copy; OpenStreetMap contributors'
             />
             <Marker ref={markerRef} position={[droneData.latitude, droneData.longitude]} icon={customIcon}>
-                <Popup>Drone's Current Location</Popup>
+                <Popup>Drones Current Location</Popup>
             </Marker>
         </MapContainer>
     );
