@@ -79,6 +79,7 @@ node server.js
 
 
 <p align="center">
-  <img src="web1.jpeg" width="400" />
-  <img src="web2.jpeg" width="400" />
+  <img src="web1.jpeg" width="300" height="400" />
+  <img src="web2.png" width="300" height="400" />
+  <img src="web3.png" width="300" height="400" />   
 </p>
