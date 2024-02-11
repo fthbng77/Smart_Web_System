@@ -31,10 +31,9 @@ function RosImagePage() {
         // Bağlantıyı hemen kurmaya çalış
         connectToRos();
     
-        // Resim verisini alacağınız ROS topic'i
         const topic = new ROSLIB.Topic({
             ros: ros,
-            name: '/usb_cam/image_compressedd', // Kullanılan topic adına dikkat edin
+            name: '/detected_faces/compressed',
             messageType: 'sensor_msgs/CompressedImage'
         });
     

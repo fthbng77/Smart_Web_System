@@ -48,11 +48,11 @@ function Root() {
       <Router>
         <Routes>
           <Route path="/app" element={<PrivateRoute><App /></PrivateRoute>} />
-          <Route path="/ros-image" element={<PrivateRoute><RosImagePage /></PrivateRoute>} /> {/* RosImagePage için yeni rota */}
+          <Route path="/ros-image" element={<PrivateRoute><RosImagePage /></PrivateRoute>} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route index element={<Navigate to="/app" replace />} /> {/* Giriş sayfası yerine App sayfasına yönlendir */}
-          <Route path="*" element={<Navigate to="/app" replace />} /> {/* Eşleşmeyen yollar için App sayfasına yönlendir */}
+          <Route index element={<Navigate to="/app" replace />} /> {/* Varsayılan olarak /app sayfasına yönlendir */}
+          <Route path="*" element={<Navigate to="/app" replace />} /> {/* Tanımsız rotalar için /app sayfasına yönlendir */}
         </Routes>
       </Router>
     </AuthProvider>

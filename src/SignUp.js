@@ -19,7 +19,7 @@ function SignUp() {
       
       if (response.data.user) {
         setUser(response.data.user);
-        navigate('/app');
+        navigate('/login');
       } else {
         setError('Registration failed, please try again.');
       }
