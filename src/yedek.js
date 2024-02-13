@@ -1,99 +1,109 @@
-import React, { useEffect, useState, createContext } from "react";
+import React, { useEffect } from 'react';
 import ROSLIB from 'roslib';
+//import DroneData from './DroneData';
+//import DroneControl from './DroneControl';
+//import JoystickControl from './JoystickControl';
+//import JoystickComponent from './JoystickComponent';
+import MyMapComponent from './MyMapComponent';
+//import { Link } from 'react-router-dom';
 
-export const DroneDataContext = createContext();
 
-export const useDroneData = () => {
-    const [data, setData] = useState({
-        groundspeed: null,
-        altitude: null,
-        latitude: null,
-        longitude: null,
-        yaw: null,
-        pitch: null,
-        roll: null,
-        mode: null,
-        armed: null,
-        battery: null,
-    });
+function App() {
+    //const [imgSrc, setImgSrc] = useState(null);
 
     useEffect(() => {
         const ros = new ROSLIB.Ros({
-            url: 'ws://localhost:9090',
+            url: 'ws://localhost:9090'
+        });
+    
+        const connectToRos = () => {
+            ros.connect('ws://localhost:9090');
+        };
+    
+        ros.on('connection', function () {
+            console.log('Connected to websocket server.');
+        });
+    
+        ros.on('error', function (error) {
+            console.log('Error connecting to websocket server: ', error);
+        });
+    
+        ros.on('close', function () {
+            console.log('Connection to websocket server closed.');
+            setTimeout(connectToRos, 3000);
+        });
+    
+        connectToRos();
+    
+        const topic = new ROSLIB.Topic({
+            ros: ros,
+            name: '/webcam/image_raw/compressed',
+            messageType: 'sensor_msgs/CompressedImage'
+        });
+    
+        topic.subscribe(function (message) {
+            console.log('Received message on ' + topic.name + ': ', message);
+    
+            if (message.data) {
+                //const imageUrl = `data:image/jpg;base64,${message.data}`;
+                //setImgSrc(imageUrl);
+            }
         });
 
-        ros.on('connection', () => console.log('Connected to websocket server.'));
-        ros.on('error', (error) => console.log('Error connecting to websocket server: ', error));
-        ros.on('close', () => console.log('Connection to websocket server closed.'));
-
-        // Function to subscribe to a topic
-        const subscribeToTopic = (topicName, messageType, callback) => {
-            const topic = new ROSLIB.Topic({
-                ros,
-                name: topicName,
-                messageType
-            });
-
-            topic.subscribe(callback);
+        return () => {
+            ros.close();
         };
-
-        // Define callbacks for each topic
-        const updateStateData = (topicKey) => (message) => {
-            setData(prevData => ({
-                ...prevData,
-                [topicKey]: message
-            }));
-        };
-
-        subscribeToTopic('/mavros/state', 'mavros_msgs/State', updateStateData('state'));
-        subscribeToTopic('/mavros/battery', 'sensor_msgs/BatteryState', updateStateData('battery'));
-        subscribeToTopic('/mavros/local_position/pose', 'geometry_msgs/PoseStamped', updateStateData('pose'));
-        subscribeToTopic('/mavros/vfr_hud', 'mavros_msgs/VFR_HUD', updateStateData('hud'));
 
     }, []);
-
-    const renderDataRows = () => {
-        const paramPairs = [
-            ['GroundSpeed', 'Altitude'],
-            ['Latitude', 'Longitude'],
-            ['Yaw', 'Pitch'],
-            ['Roll', 'Mode'],
-            ['Armed', 'Battery'],
-        ];
-
-        return paramPairs.map((paramPair, rowIdx) => (
-            <tr key={rowIdx} style={{ backgroundColor: '#f9f9f9', border: '1px solid #ddd', padding: '8px' }}>
-                {paramPair.map((param, colIdx) => (
-                    <React.Fragment key={colIdx}>
-                        <td style={{ padding: '8px' }}>{param}</td>
-                        <td style={{ padding: '8px' }}>
-                            {param === 'Armed' ? (data.armed ? 'ARMED' : 'DISARMED') : 
-                             param === 'Battery' ? `${data.battery} %` : 
-                             data[param.toLowerCase()]}
-                        </td>
-                    </React.Fragment>
-                ))}
-            </tr>
-        ));
-    };
-
+    
     return (
-        <div style={{ margin: '20px', padding: '20px', border: '1px solid #ddd' }}>
-            <table style={{ width: '100%', backgroundColor: '#f9f9f9', borderCollapse: 'separate', borderSpacing: '0 10px' }}>
-                <thead>
-                    <tr>
-                        <th style={{ borderBottom: '1px solid #ddd' }}>Parameter</th>
-                        <th style={{ borderBottom: '1px solid #ddd' }}>Value</th>
-                        <th style={{ borderBottom: '1px solid #ddd' }}>Parameter</th>
-                        <th style={{ borderBottom: '1px solid #ddd' }}>Value</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {renderDataRows()}
-                </tbody>
-            </table>
-        </div>
+    
+            {/* Navigasyon Bar 
+            <nav style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 2 }}>
+                <ul>
+                    <li><Link to="/app">Home</Link></li>
+                    <li><Link to="/ros-image">ROS Image</Link></li>
+                </ul>
+            </nav>
+    
+            {/*
+            <div style={{ position: 'absolute', top: 50, left: 0, right: 0, zIndex: 2, display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: 'auto 1fr auto', height: 'calc(100% - 50px)' }}>
+                {/* Üst Sol - Görüntüler 
+                <div style={{ gridColumn: '1', gridRow: '1', padding: '10px', zIndex: 2 }}>
+                    {imgSrc && <img src={imgSrc} alt="From ROS" style={{ width: '100%', height: 'auto', maxHeight: '100%' }} />}
+                </div>
+    
+                <div style={{ gridColumn: '2', gridRow: '1', display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: '10px', padding: '10px', background: 'rgba(255, 255, 255, 0.8)', zIndex: 2 }}>
+                    <div style={{ padding: '10px', border: '1px solid #ddd', borderRadius: '8px', flex: 1, display: 'flex', flexDirection: 'column', gap: '10px', boxSizing: 'border-box' }}>
+                        <DroneControl />
+                    </div>
+                    <div style={{ padding: '0px', border: '1px solid #ddd', borderRadius: '8px', display: 'flex', flexDirection: 'row', gap: '100px', boxSizing: 'border-box', height: '130px' }}>
+                        <div style={{ flex: 1 }}>
+                            <JoystickControl />
+                        </div>
+                        <div style={{ flex: 1, overflow: 'auto', marginTop: '10px' }}>
+                            <JoystickComponent />
+                        </div>
+                    </div>
+                </div>
+    
+                {/* Orta - Drone Verileri 
+                <div style={{ gridColumn: '1 / -1', gridRow: '2', padding: '20px', background: 'rgba(249, 249, 249, 0.8)', zIndex: 2 }}>
+                    <DroneData />
+                </div>
+            </div>*/}
     );
 }
 
-export default DroneData;
+export default App;
+    
+
+return (
+    <div style={{ height: dimensions.height, width: dimensions.width, position: 'relative' }}>
+        <div style={{ position: 'absolute', top: 0, left: 0, bottom: 0, right: 0, zIndex: 0 }}>
+            {/* MyMapComponent burada ekranın tamamını kaplayacak şekilde yerleştiriliyor. */}
+            <MyMapComponent />
+        </div>
+    </div>
+);
+}

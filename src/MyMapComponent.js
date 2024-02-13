@@ -90,9 +90,9 @@ function MyMapComponent() {
     return (
         <MapContainer 
             center={[droneData.latitude, droneData.longitude]} 
-            zoom={13} 
+            zoom={15} 
             whenCreated={setMap}
-            style={{ width: '100%', height: '400px' }}>
+            style={{ width: '100%', height: '100%' }}>
             <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 attribution='&copy; OpenStreetMap contributors'
