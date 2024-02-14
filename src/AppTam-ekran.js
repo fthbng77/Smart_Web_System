@@ -71,7 +71,7 @@ function App() {
     return (
         <div style={{ height: dimensions.height, width: dimensions.width, position: 'relative' }}>
             {/* Navigasyon Bar */}
-            <nav style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 3 }}>
+            <nav style={{ position: 'absolute', top: 500, left: 0, right: 0, zIndex: 3 }}>
                 <ul>
                     <li><Link to="/app">Home</Link></li>
                     <li><Link to="/ros-image">ROS Image</Link></li>
@@ -79,7 +79,7 @@ function App() {
             </nav>
 
             {/* Drone Verileri - Uygulamanın En Üstünde */}
-            <div style={{ position: 'absolute', top: 50, left: 0, right: 0, zIndex: 3 }}>
+            <div style={{ position: 'absolute', top: -40, left: 0, right: 0, zIndex: 3 }}>
                 <DroneData />
             </div>
 
