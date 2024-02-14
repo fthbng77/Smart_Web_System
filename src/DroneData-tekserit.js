@@ -95,8 +95,6 @@ function DroneData() {
         });
 
     }, []);
-
-    //const batteryImagePath = '/battery.png';
     
     return (
         <div style={{ margin: '20px', padding: '20px', border: '1px solid #ddd' }}>
@@ -108,19 +106,15 @@ function DroneData() {
                                 <td style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'center' }}>
                                     {key === 'battery' ? (
                                         <img src="battery.svg" alt={`Battery level ${value}%`} style={{ width: '24px', height: '24px' }} />
+                                    ) : key === 'groundspeed' ? (
+                                        <img src="speed.svg" alt="Groundspeed" style={{ width: '24px', height: '24px' }} />
                                     ) : (
                                         key.charAt(0).toUpperCase() + key.slice(1)
                                     )}
                                 </td>
-                                {key === 'battery' ? (
-                                    <td style={{ padding: '8px', borderBottom: '1px solid #ddd' }}>
-                                        {`${value}%`}
-                                    </td>
-                                ) : (
-                                    <td style={{ padding: '8px', borderBottom: '1px solid #ddd' }}>
-                                        {key === 'armed' ? (value ? 'ARMED' : 'DISARMED') : value}
-                                    </td>
-                                )}
+                                <td style={{ padding: '8px', borderBottom: '1px solid #ddd' }}>
+                                    {key === 'armed' ? (value ? 'ARMED' : 'DISARMED') : value}
+                                </td>
                             </React.Fragment>
                         ))}
                     </tr>
@@ -128,8 +122,6 @@ function DroneData() {
             </table>
         </div>
     );
-    
-    
 }
 
 export default DroneData;
