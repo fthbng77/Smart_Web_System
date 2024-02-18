@@ -76,6 +76,10 @@ server çalıştırmak ve mongoDB ile bağlantıyı kontrol etmek için:
 ```
 node server.js
 ```
+ilerki süreçte dosyaların kurulumları yapıldıktan sonra flask ile web arasondaki bağlantıyı sağlamak için:
+```
+curl -X POST http://localhost:5000/start-ai-model
+```
 
 
 <p align="center">
