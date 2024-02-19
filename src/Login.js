@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from './Root';
-
+//const serverUrl = 'http://0.0.0.0:3000/auth/login'; Bunun ile her şekilde aynı ağdaki farklı cihazlar bağlanabiliyor
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -22,6 +22,7 @@ function Login() {
 
     try {
       const response = await axios.post('http://localhost:3000/auth/login', { email, password }, {
+
         headers: {
           'Content-Type': 'application/json'
         },
