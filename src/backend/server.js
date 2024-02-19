@@ -9,10 +9,9 @@ const setupRosConnection = require('./ros/rosConnection');
 
 const app = express();
 
-// CORS yapılandırmasını güncelleyin
 const corsOptions = {
-  origin: 'http://localhost:3001', // İstemci uygulamanızın kökeni
-  credentials: true, // Kimlik bilgilerinin dahil edilmesine izin ver
+  origin: '*',
+  credentials: true,
 };
 app.use(cors(corsOptions));
 
@@ -30,17 +29,16 @@ mongoose.connect('mongodb://localhost/gokmendatabase', {
 });
 
 app.use(express.json());
-app.use('/auth', authRoutes); // '/auth' altında tanımlanan rotaları kullan
+app.use('/auth', authRoutes);
 
 setupRosConnection(io);
 
-// Statik dosyaları sunma
 app.use(express.static('/home/fatih/catkin_ws/src/iq_gnc/scripts/Gokmen/gokmen-app/build'));
 
 app.get('*', (req, res) => {
   res.sendFile(path.resolve('/home/fatih/catkin_ws/src/iq_gnc/scripts/Gokmen/gokmen-app/build', 'index.html'));
 });
 
-server.listen(3000, () => {
+server.listen(3000, '0.0.0.0', () => {
   console.log('Server is listening on port 3000');
 });
