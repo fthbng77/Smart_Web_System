@@ -74,6 +74,7 @@ use gokmendatabase
 ```
 server çalıştırmak ve mongoDB ile bağlantıyı kontrol etmek için:
 ```
+cd ~/catkin_ws/src/iq_gnc/scripts/Gokmen/gokmen-app/src/backend
 node server.js
 ```
 ilerki süreçte dosyaların kurulumları yapıldıktan sonra flask ile web arasondaki bağlantıyı sağlamak için Bunun yerine web üzerindeki yapay zekayı başlat butonuna da basabilirsiniz:
