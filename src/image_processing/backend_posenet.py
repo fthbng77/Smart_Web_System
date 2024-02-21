@@ -71,8 +71,8 @@ def run_ai_model():
         rospy.init_node('posenet_node', anonymous=True, disable_signals=True)
 
     net = poseNet('resnet18-body')
-    pub = rospy.Publisher('/detectnet_result', String, queue_size=10)
-    compressed_pub = rospy.Publisher('/usb_cam/image_compressed', CompressedImage, queue_size=10)
+    pub = rospy.Publisher('/pose_result', String, queue_size=10)
+    compressed_pub = rospy.Publisher('/PoseNet/compressed', CompressedImage, queue_size=10)
     rospy.Subscriber('/usb_cam/image_raw', Image, image_callback)
     rospy.spin()
 
