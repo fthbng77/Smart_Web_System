@@ -98,7 +98,7 @@ function RosImagePage() {
             <div className="page-container">
                 <div style={{ position: 'absolute', top: 10, left: 0, right: 0, textAlign: 'center' }}>
                     {/* Model seçimi için butonlar */}
-                    {['DetectNet', 'PoseNet', 'DepthNet', 'Age_GenderNet', 'ImageNet'].map((model) => (
+                    {['DetectNet', 'PoseNet', 'DepthNet', 'Age_GenderNet', 'ImageNet', 'FaceNet'].map((model) => (
                         <button key={model} className="button" onClick={() => handleModelChange(model)} style={{ margin: '0 5px' }}>
                             {model}
                         </button>
