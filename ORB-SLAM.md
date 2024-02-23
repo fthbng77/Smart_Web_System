@@ -21,4 +21,8 @@ cd ORB_SLAM3
 chmod +x build.sh
 ./build.sh
 ```
-
+ardından wrapper dosyası indirilicek:
+```
+cd ~/catkin_ws/src/
+git clone https://github.com/thien94/orb_slam3_ros_wrapper.git
+```
