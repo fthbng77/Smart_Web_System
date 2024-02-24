@@ -7,5 +7,5 @@
     </node>
 
     <!-- Görüntüleri sıkıştırma ve /visual_slam/compressed konusuna yayınlama -->
-    <node name="image_compress" pkg="image_transport" type="republish" args="raw in:=/usb_cam/image_raw compressed out:=/visual_slam/compressed" output="screen" />
+    <node name="image_compress" pkg="image_transport" type="republish" args="raw in:=/usb_cam/image_raw compressed out:=/Visual_Slam" output="screen" />
 </launch>
