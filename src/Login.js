@@ -19,24 +19,38 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(''); // Mevcut hataları temizle
+
+    // URL doğru yapılandırıldı mı kontrol edin
+    const serverUrl = 'http://0.0.0.0:3000/auth/login';
 
     try {
-      const response = await axios.post('http://localhost:3000/auth/login', { email, password }, {
+      const response = await axios.post(serverUrl, { email, password }, {
         headers: {
           'Content-Type': 'application/json'
         },
-        withCredentials: true // Important for CORS and cookies if you use them
+        withCredentials: true // CORS ve çerezler için önemli
       });
 
       if (response.data.token) {
         localStorage.setItem('authToken', response.data.token);
-        auth.setUser(response.data.user); // Update user state
+        auth.setUser(response.data.user); // Kullanıcı durumunu güncelle
         navigate('/app');
       } else {
         setError('Login failed. Please check your credentials.');
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'An unexpected error occurred during login.');
+      // Hata mesajını daha anlaşılır hale getir
+      if (err.response) {
+        // Sunucu tarafından döndürülen hata mesajı
+        setError(err.response.data.message || 'Login failed. Please check your credentials.');
+      } else if (err.request) {
+        // İstek yapıldı ancak yanıt alınamadı
+        setError('The server did not respond. Please check your network connection and the server status.');
+      } else {
+        // İstek yapılamadan bir hata oluştu
+        setError('An error occurred while setting up the request. Please try again.');
+      }
     }
   };
 

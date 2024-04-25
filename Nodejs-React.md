@@ -74,9 +74,18 @@ use gokmendatabase
 ```
 server çalıştırmak ve mongoDB ile bağlantıyı kontrol etmek için:
 ```
+cd ~/catkin_ws/src/iq_gnc/scripts/Gokmen/gokmen-app/src/backend
 node server.js
 ```
-
+ilerki süreçte dosyaların kurulumları yapıldıktan sonra flask ile web arasondaki bağlantıyı sağlamak için Bunun yerine web üzerindeki yapay zekayı başlat butonuna da basabilirsiniz:
+```
+curl -X POST http://localhost:5000/start-ai-model
+```
+Ek olarak eskiden ``` roslaunch usb_cam usb_cam-test.launch ``` kullanıyordum. launch dosyasını düzenledim sadece topic yayınlanması için:
+```
+cd ~/catkin_ws/src/iq_gnc/scripts/Gokmen/gokmen-app/src/image_processing
+roslaunch usb_cam-test.launch
+```
 
 <p align="center">
   <img src="web1.jpeg" width="300" height="400" />
