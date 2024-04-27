@@ -77,11 +77,11 @@ function Login() {
               required 
             />
           </label>
-          <button type="submit">Login</button>
+          <button type="submit">Oturumu Aç</button>
           {error && <div className="error-message">{error}</div>}
         </form>
         <div className="signup-link">
-          <p>Dont have an account? <Link to="/signup">Sign Up</Link></p>
+          <p>Hesabınız yok mu? <Link to="/signup">Kayıt Ol</Link></p>
         </div>
       </div>
     </div>
