@@ -32,6 +32,7 @@ function DroneData() {
             console.log('Connection to websocket server closed.');
         });
 
+        // State Topic
         const stateTopic = new ROSLIB.Topic({
             ros: ros,
             name: '/mavros/state',
@@ -46,6 +47,7 @@ function DroneData() {
             }));
         });
 
+        // Battery Topic
         const batteryTopic = new ROSLIB.Topic({
             ros: ros,
             name: '/mavros/battery',
@@ -55,11 +57,11 @@ function DroneData() {
         batteryTopic.subscribe(function (message) {
             setData(prevData => ({
                 ...prevData,
-                // Örnek olarak, voltage ve current kullanıldı.
-                battery: message.percentage * 100,
+                battery: parseFloat(message.percentage * 100).toFixed(1),
             }));
         });
 
+        // Pose Topic
         const poseTopic = new ROSLIB.Topic({
             ros: ros,
             name: '/mavros/local_position/pose',
@@ -69,15 +71,16 @@ function DroneData() {
         poseTopic.subscribe(function (message) {
             setData(prevData => ({
                 ...prevData,
-                altitude: message.pose.position.z,
+                altitude: parseFloat(message.pose.position.z).toFixed(2),
                 latitude: message.pose.position.x,
                 longitude: message.pose.position.y,
-                yaw: message.pose.orientation.z,
-                pitch: message.pose.orientation.y,
-                roll: message.pose.orientation.x,
+                yaw:  parseFloat(message.pose.orientation.z).toFixed(2),
+                pitch:  parseFloat(message.pose.orientation.y).toFixed(2),
+                roll:  parseFloat(message.pose.orientation.x).toFixed(2),
             }));
         });
 
+        // Velocity Topic
         const velocityTopic = new ROSLIB.Topic({
             ros: ros,
             name: '/mavros/vfr_hud',
@@ -87,42 +90,34 @@ function DroneData() {
         velocityTopic.subscribe(function (message) {
             setData(prevData => ({
                 ...prevData,
-                groundspeed: message.groundspeed,
+                groundspeed: parseFloat(message.groundspeed).toFixed(2),
             }));
         });
 
     }, []);
-
+    
     return (
         <div style={{ margin: '20px', padding: '20px', border: '1px solid #ddd' }}>
-            <table style={{ width: '100%', backgroundColor: '#f9f9f9', borderCollapse: 'separate', borderSpacing: '0 10px' }}>
-                <thead>
-                    <tr>
-                        <th style={{ borderBottom: '1px solid #ddd' }}>Parameter</th>
-                        <th style={{ borderBottom: '1px solid #ddd' }}>Value</th>
-                        <th style={{ borderBottom: '1px solid #ddd' }}>Parameter</th>
-                        <th style={{ borderBottom: '1px solid #ddd' }}>Value</th>
-                    </tr>
-                </thead>
+            <table style={{ width: '100%', backgroundColor: '#f9f9f9', borderCollapse: 'collapse', borderSpacing: '0' }}>
                 <tbody>
-                    {[
-                        ['GroundSpeed', 'Altitude'],
-                        ['Latitude', 'Longitude'],
-                        ['Yaw', 'Pitch'],
-                        ['Roll', 'Mode'],
-                        ['Armed', 'Battery'],
-                    ].map((paramPair, rowIdx) => (
-                        <tr key={rowIdx} style={{ backgroundColor: '#f9f9f9', border: '1px solid #ddd', padding: '8px' }}>
-                            {paramPair.map((param, colIdx) => (
-                                <React.Fragment key={colIdx}>
-                                    <td style={{ padding: '8px' }}>{param}</td>
-                                    <td style={{ padding: '8px' }}>
-                                        {param === 'Armed' ? (data.armed ? 'ARMED' : 'DISARMED') : param === 'Battery' ? `${data.battery} %` : data[param.toLowerCase()]}
-                                    </td>
-                                </React.Fragment>
-                            ))}
-                        </tr>
-                    ))}
+                    <tr>
+                        {Object.entries(data).map(([key, value]) => (
+                            <React.Fragment key={key}>
+                                <td style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'center' }}>
+                                    {key === 'battery' ? (
+                                        <img src="battery.svg" alt={`Battery level ${value}%`} style={{ width: '24px', height: '24px' }} />
+                                    ) : key === 'groundspeed' ? (
+                                        <img src="speed.svg" alt="Groundspeed" style={{ width: '24px', height: '24px' }} />
+                                    ) : (
+                                        key.charAt(0).toUpperCase() + key.slice(1)
+                                    )}
+                                </td>
+                                <td style={{ padding: '8px', borderBottom: '1px solid #ddd' }}>
+                                    {key === 'armed' ? (value ? 'ARMED' : 'DISARMED') : value}
+                                </td>
+                            </React.Fragment>
+                        ))}
+                    </tr>
                 </tbody>
             </table>
         </div>
