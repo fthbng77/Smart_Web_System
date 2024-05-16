@@ -131,7 +131,7 @@ function App() {
             </div>
             
             {/* Compass bileşenini ekleyin */}
-            <div style={{ position: 'absolute', top: 100, right: 10, zIndex: 3 }}>
+            <div style={{ position: 'absolute', top: -350, right: 20, zIndex: 3 }}>
                 <Compass />
             </div>
         </div>
