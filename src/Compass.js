@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import ROSLIB from 'roslib';
+import compassImage from './compass.png';
 
 const Compass = () => {
-    const [degree, setDegree] = useState(0); // Derece için başlangıç değeri
+  const [heading, setHeading] = useState(0);
+
 
     useEffect(() => {
         const ros = new ROSLIB.Ros({
@@ -28,7 +30,7 @@ const Compass = () => {
         });
 
         compassTopic.subscribe((message) => {
-            setDegree(message.data); // Gelen derece değerini güncelle
+            setHeading(message.data);
         });
 
         return () => {
@@ -36,22 +38,19 @@ const Compass = () => {
             ros.close();
         };
     }, []);
+    
+  const compassStyle = {
+    transform: `rotate(${heading}deg)`,
+    width: '200px', // Pusula görüntüsünün genişliğini ayarlayabilirsiniz
+    height: '200px', // Pusula görüntüsünün yüksekliğini ayarlayabilirsiniz
+    transition: 'transform 0.5s ease-in-out', // Döndürme animasyonu ekleyebilirsiniz
+  };
 
-    return (
-        <div className="compass-container" style={{ width: '100px', height: '100px' }}>
-            <img 
-                src="/compass.png" 
-                alt="Compass" 
-                style={{ 
-                    width: '100%', 
-                    height: '100%', 
-                    transform: `rotate(${degree}deg)`, 
-                    transition: 'transform 0.2s ease-out' // Dönüş animasyonu için
-                }} 
-            />
-        </div>
-    );
+  return (
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+      <img src={compassImage} alt="Compass" style={compassStyle} />
+    </div>
+  );
 };
 
 export default Compass;
-
