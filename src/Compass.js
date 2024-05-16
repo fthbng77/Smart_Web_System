@@ -41,9 +41,9 @@ const Compass = () => {
     
   const compassStyle = {
     transform: `rotate(${heading}deg)`,
-    width: '200px', // Pusula görüntüsünün genişliğini ayarlayabilirsiniz
-    height: '200px', // Pusula görüntüsünün yüksekliğini ayarlayabilirsiniz
-    transition: 'transform 0.5s ease-in-out', // Döndürme animasyonu ekleyebilirsiniz
+    width: '150px',
+    height: '150px',
+    transition: 'transform 0.5s ease-in-out',
   };
 
   return (
