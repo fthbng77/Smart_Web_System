@@ -4,8 +4,8 @@ import DroneData from './DroneData';
 import DroneControl from './DroneControl';
 import MyMapComponent from './MyMapComponent';
 import JoystickControl from './JoystickControl';
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
-import Compass from './Compass'; // Compass bileşenini import edin
+import { Link } from 'react-router-dom';
+import Compass from './Compass';
 
 function App() {
     const [imgSrc, setImgSrc] = useState(null);
@@ -128,6 +128,11 @@ function App() {
             </div>
             <div style={{ position: 'absolute', top: 0, left: 0, bottom: 0, right: 0, zIndex: 2 }}>
                 <MyMapComponent />
+            </div>
+            
+            {/* Compass bileşenini ekleyin */}
+            <div style={{ position: 'absolute', top: 100, right: 10, zIndex: 3 }}>
+                <Compass />
             </div>
         </div>
     );
