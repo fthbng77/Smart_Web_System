@@ -13,6 +13,6 @@ git push -u -f origin main
 ```
 normal key:
 ```
-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
+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
 ```
 
