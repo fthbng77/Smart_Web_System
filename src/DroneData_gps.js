@@ -64,19 +64,32 @@ function DroneData() {
         // Pose Topic
         const poseTopic = new ROSLIB.Topic({
             ros: ros,
-            name: '/mavros/local_position/pose',
-            messageType: 'geometry_msgs/PoseStamped'
+            name: '/mavros/global_position/global',
+            messageType: 'sensor_msgs/NavSatFix'
         });
 
         poseTopic.subscribe(function (message) {
             setData(prevData => ({
                 ...prevData,
-                altitude: parseFloat(message.pose.position.z).toFixed(2),
-                latitude: message.pose.position.x,
-                longitude: message.pose.position.y,
-                yaw:  parseFloat(message.pose.orientation.z).toFixed(2),
-                pitch:  parseFloat(message.pose.orientation.y).toFixed(2),
-                roll:  parseFloat(message.pose.orientation.x).toFixed(2),
+                altitude: parseFloat(message.altitude).toFixed(2),
+                latitude: parseFloat(message.latitude).toFixed(6),
+                longitude: parseFloat(message.longitude).toFixed(6),
+            }));
+        });
+        
+        
+        const imuTopic = new ROSLIB.Topic({
+            ros: ros,
+            name: '/mavros/imu/data',
+            messageType: 'sensor_msgs/Imu'
+        });
+
+        imuTopic.subscribe(function (message) {
+            setData(prevData => ({
+                ...prevData,
+                yaw: parseFloat(message.orientation.z).toFixed(2),
+                pitch: parseFloat(message.orientation.y).toFixed(2),
+                roll: parseFloat(message.orientation.x).toFixed(2),
             }));
         });
 

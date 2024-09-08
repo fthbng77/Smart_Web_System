@@ -26,7 +26,6 @@ function App() {
 
         window.addEventListener('resize', handleResize);
 
-        // ROSLIB ile ilgili kodlar
         const ros = new ROSLIB.Ros({
             url: 'ws://localhost:9090'
         });
@@ -139,3 +138,4 @@ function App() {
 }
 
 export default App;
+

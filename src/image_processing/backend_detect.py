@@ -17,7 +17,7 @@ net = None
 pub = None
 cv_img = None
 compressed_pub = None
-
+model_thread = None
 
 def image_callback(msg):
     global cv_img, net, pub, compressed_pub
@@ -49,9 +49,9 @@ def run_ai_model():
     if not rospy.core.is_initialized():
         rospy.init_node('detectnet_node', anonymous=True, disable_signals=True)
 
-    net = detectNet("ssd-mobilenet-v2")
+    net = detectNet("facenet")
     pub = rospy.Publisher('/detectnet_result', String, queue_size=10)
-    compressed_pub = rospy.Publisher('/detected_faces/compressed', CompressedImage, queue_size=10)
+    compressed_pub = rospy.Publisher('/DetectNet/compressed', CompressedImage, queue_size=10)
     rospy.Subscriber('/usb_cam/image_raw', Image, image_callback)
     rospy.spin()
 
@@ -70,6 +70,7 @@ def start_ai_model():
 def catch_all(path):
     app.logger.warning(f"Received unexpected request to /{path}")
     return jsonify({"error": "Endpoint not found"}), 404
+
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

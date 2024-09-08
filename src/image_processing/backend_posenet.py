@@ -73,7 +73,7 @@ def run_ai_model():
     net = poseNet('resnet18-body')
     pub = rospy.Publisher('/pose_result', String, queue_size=10)
     compressed_pub = rospy.Publisher('/PoseNet/compressed', CompressedImage, queue_size=10)
-    rospy.Subscriber('/usb_cam/image_raw', Image, image_callback)
+    rospy.Subscriber('/webcam/image_raw', Image, image_callback)
     rospy.spin()
 
 @app.route('/start-ai-model', methods=['POST'])

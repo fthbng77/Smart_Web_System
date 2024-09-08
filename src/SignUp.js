@@ -44,7 +44,7 @@ function SignUp() {
         <label>Password:
           <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
         </label>
-        <button type="submit">Sign Up</button>
+        <button type="submit">Kayıt Ol</button>
         {/* Hata mesajını string olarak render edin */}
         {error && <p className="error">{error}</p>}
       </form>

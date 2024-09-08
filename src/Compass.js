@@ -4,44 +4,45 @@ import ROSLIB from 'roslib';
 const Compass = () => {
   const [heading, setHeading] = useState(0);
 
-  useEffect(() => {
-    const ros = new ROSLIB.Ros({
-      url: 'ws://localhost:9090' // ROS bridge sunucunuzun adresi
-    });
 
-    ros.on('connection', () => {
-      console.log('Connected to ROS bridge.');
-    });
+    useEffect(() => {
+        const ros = new ROSLIB.Ros({
+            url: 'ws://localhost:9090' // ROS bridge sunucunuzun adresi
+        });
 
-    ros.on('error', (error) => {
-      console.error('Error connecting to ROS bridge: ', error);
-    });
+        ros.on('connection', () => {
+            console.log('Connected to ROS bridge.');
+        });
 
-    ros.on('close', () => {
-      console.log('Connection to ROS bridge closed.');
-    });
+        ros.on('error', (error) => {
+            console.error('Error connecting to ROS bridge: ', error);
+        });
 
-    const compassTopic = new ROSLIB.Topic({
-      ros: ros,
-      name: '/mavros/global_position/compass_hdg',
-      messageType: 'std_msgs/Float64'
-    });
+        ros.on('close', () => {
+            console.log('Connection to ROS bridge closed.');
+        });
 
-    compassTopic.subscribe((message) => {
-      setHeading(message.data);
-    });
+        const compassTopic = new ROSLIB.Topic({
+            ros: ros,
+            name: '/mavros/global_position/compass_hdg',
+            messageType: 'std_msgs/Float64'
+        });
 
-    return () => {
-      compassTopic.unsubscribe();
-      ros.close();
-    };
-  }, []);
+        compassTopic.subscribe((message) => {
+            setHeading(message.data);
+        });
 
+        return () => {
+            compassTopic.unsubscribe();
+            ros.close();
+        };
+    }, []);
+    
   const compassStyle = {
     transform: `rotate(${heading}deg)`,
-    width: '125px', // Pusula görüntüsünün genişliğini ayarlayabilirsiniz
-    height: '125px', // Pusula görüntüsünün yüksekliğini ayarlayabilirsiniz
-    transition: 'transform 0.5s ease-in-out', // Döndürme animasyonu ekleyebilirsiniz
+    width: '150px',
+    height: '150px',
+    transition: 'transform 0.5s ease-in-out',
   };
 
   return (
@@ -52,3 +53,4 @@ const Compass = () => {
 };
 
 export default Compass;
+

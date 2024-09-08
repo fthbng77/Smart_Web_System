@@ -282,3 +282,21 @@ input:checked + .slider:before {
 	margin-top: 10px;
 	color: #555;
 }
+
+.map-button {
+  position: absolute;
+  top: 80px; /* Sol üstteki telemetri verilerinin altına yerleştirir */
+  left: 20px; /* Ekranın sol kenarından 20px içeride */
+  z-index: 1000; /* Butonun üstte kalmasını sağlar */
+  padding: 10px 15px; /* İç boşluk */
+  background-color: #ffffff; /* Arka plan rengi */
+  border: 1px solid #ccc; /* Kenarlık */
+  border-radius: 5px; /* Kenar yuvarlaklığı */
+  cursor: pointer; /* İmleç */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Hafif gölge */
+  transition: background-color 0.3s ease; /* Renk geçişi efekti */
+}
+
+.map-button:hover {
+  background-color: #f0f0f0; /* Hover efekti */
+}

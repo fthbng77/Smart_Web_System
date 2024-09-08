@@ -10,8 +10,10 @@ import numpy as np
 
 def image_callback(msg):
     global cv_img
-    cv_img = CvBridge().imgmsg_to_cv2(msg, desired_encoding="passthrough")
-    cv_img = cv2.cvtColor(cv_img, cv2.COLOR_BGR2RGB)
+    # CompressedImage mesajını numpy array'ine çevir
+    np_arr = np.fromstring(msg.data, np.uint8)
+    cv_img = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
+    #cv_img = cv2.cvtColor(cv_img, cv2.COLOR_BGR2RGB)
     cuda_img = cudaFromNumpy(cv_img)
 
     detections = net.Detect(cuda_img)
@@ -29,9 +31,8 @@ def image_callback(msg):
 
         rospy.loginfo("Detected '{}' (class #{}) with {:.2f}% confidence".format(class_desc, detection.ClassID, confidence * 100))
 
-
     # publish compressed image
-    compressed_img_msg = CvBridge().cv2_to_compressed_imgmsg(cv_img)
+    compressed_img_msg = CvBridge().cv2_to_compressed_imgmsg(cv_img, dst_format='jpeg')
     compressed_pub.publish(compressed_img_msg)
 
 def main():
@@ -41,15 +42,14 @@ def main():
 
     rospy.init_node('detectnet_node', anonymous=True)
 
-    sub = rospy.Subscriber('/usb_cam/image_raw', Image, image_callback)
+    # Abone olurken mesaj tipini CompressedImage olarak değiştir
+    sub = rospy.Subscriber('/webcam/image_raw/compressed', CompressedImage, image_callback)
 
     pub = rospy.Publisher('/detectnet_result', String, queue_size=10)
-    compressed_pub = rospy.Publisher('/usb_cam/image_compressedd', CompressedImage, queue_size=10)
+    compressed_pub = rospy.Publisher('/detect/image_compressed', CompressedImage, queue_size=10)
 
-    # create a window to display the image
     rospy.spin()
 
 if __name__ == '__main__':
     cv_img = None
     main()
-
