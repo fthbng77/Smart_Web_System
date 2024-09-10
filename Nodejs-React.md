@@ -87,6 +87,13 @@ cd ~/catkin_ws/src/iq_gnc/scripts/Gokmen/gokmen-app/src/image_processing
 roslaunch usb_cam-test.launch
 ```
 
+Webi kolay başlatma yöntemi:
+```
+find ~/ -type f -path '*/Web-PG/web.sh' -exec mv {} ~/ \;
+chmod +x web.sh
+./web.sh
+```
+
 <p align="center">
   <img src="web1.jpeg" width="300" height="400" />
   <img src="web2.png" width="300" height="400" />
