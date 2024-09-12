@@ -120,8 +120,6 @@ function App() {
         <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           {!isJoystickVisible ? <DroneControl /> : <JoystickControl />}
         </div>
-
-        {/* Yeni buton burada */}
         <DroneControlButton />
 
       </div>
