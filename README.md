@@ -1,23 +1,11 @@
-# Web-PG
+# Smart_Web_System
+Preparing websocket using react, node.js, flask and ros
 
 
+Kendi ürettiğimiz araçlarımızın yer kontrol istasyon arayüzü, aracımızdan gelen anlık telemetri verisi kamera görüntüsü ve haritada konumunu anlık olarak gösterirken kameradan gelen görüntüleri yapay zeka modeli kullanarak çıkarım yapmaktadır.
 
-```
-git add .
-git commit -m "update"
-```
-```
-git pull
+<img src="websocket.png" alt="websocket" style="width:100%;"/>
 
-git push -u -f origin main
-```
-normal key:
-```
-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
-```
+Arayüzün Yapay zeka ekranları ve Uçuş bilgilerini elde edeceğimiz HUD ekranları ile kullanımı:
 
-```
-find ~/ -type f -path '*/Web-PG/web.sh' -exec mv {} ~/ \;
-chmod +x web.sh
-./web.sh
-```
+![websocket](update-web.png)
